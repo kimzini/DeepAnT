@@ -1,3 +1,5 @@
+import os
+import random
 import numpy as np
 import torch
 
@@ -7,6 +9,14 @@ from model.detector import AnomalyDetecter
 from .data import load, split, loaders
 from .train import train
 from .plot import plot
+
+def set_seed(seed: int = 42, deterministic: bool = True):
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
 
 def collect_scores(detector: AnomalyDetecter, loader, device) -> np.ndarray:
@@ -43,6 +53,7 @@ def predict_segment(
 
 def run(
     csv_path="data/TravelTime_451.csv",
+    seed=42,
     p_w=1,
     conv_kernel_size=5,
     epochs=50,
@@ -54,6 +65,7 @@ def run(
     k=2.0,  #k-sigma
     out_path="experiments/univariate/images/result_plot.png",
 ):
+    set_seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     ts, values = load(csv_path)
