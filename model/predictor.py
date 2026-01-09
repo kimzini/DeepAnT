@@ -8,7 +8,7 @@ class PredictorParams:
     w: int  # history window
     conv_kernel_size: int
     p_w: int    # predicted window size
-    feature_dim: int    # Univariate로 설정
+    feature_dim: int
     conv_channels: int
     pool_kernel_size: int
 
