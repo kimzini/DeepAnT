@@ -62,14 +62,7 @@ def loaders(train, val, w, p_w, batch_size):
     return train_loader, val_loader
 
 
-# 과거 w개 시점으로 예측하고, 다음 p_w 실제값이 들어오면 score 계산
-def slide(test: np.ndarray, w: int, p_w: int):
-    for i in range(0, len(test) - w - p_w + 1):
-        x = test[i : i + w]
-        y = test[i + w : i + w + p_w]
-        yield i, x, y
-
-
+# label
 def load_anomaly_windows(csv_path: str, json_path: str) -> List[Tuple[str, str]]:
     with open(json_path, 'r') as f:
         anomaly_windows_dict = json.load(f)
@@ -86,7 +79,6 @@ def create_anomaly_labels(
     timestamps: np.ndarray,
     csv_path: str,
     json_path: str,
-    start_idx: int = 0
 ) -> np.ndarray:
     anomaly_windows = load_anomaly_windows(csv_path, json_path)
     
